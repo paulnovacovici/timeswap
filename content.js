@@ -98,13 +98,10 @@ function convertMoneyToHours() {
     nodesToProcess.push(n);
   }
 
-  console.log(nodesToProcess);
-
   const moneyRegex = /([£$€]\s*\d{1,3}(?:,\d{3})*(?:\.\d{2})?)/;
 
   for (const startNode of nodesToProcess) {
     const text = startNode.nodeValue;
-    console.log(text, text.length);
     if (moneyRegex.test(text)) {
       // ✅ We found a full amount in this single node
       const originalPriceString = text.match(moneyRegex)[1];
