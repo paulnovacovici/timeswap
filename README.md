@@ -28,26 +28,6 @@ Click "Convert to Hours" to see prices across the active page instantly converte
 
 Enjoy clearer spending decisions by quickly seeing how purchases impact your personal time.
 
-Project Structure
-graphql
-Copy
-Edit
-timeswap/
-├── background.js           # Background service worker script
-├── content.js              # Script injected into webpages for converting prices
-├── popup.html              # Popup interface HTML file
-├── popup.js                # Logic for popup interactions and storage management
-├── manifest.json           # Chrome extension manifest
-└── icons/
-    ├── icon16.png
-    ├── icon48.png
-    └── icon128.png
-Development
-Permissions
-storage: Used to securely save user preferences.
-
-activeTab: Needed for sending messages from the popup to the currently active webpage.
-
 Contributing
 Feel free to open issues or submit pull requests to enhance TimeSwap’s functionality. Contributions are welcome!
 
