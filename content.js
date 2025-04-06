@@ -1,6 +1,45 @@
 // Content script for TimeSwap extension
 console.log("TimeSwap content script loaded");
 
+// -----------------------------------------------------------------------------
+//  Global hourly‑wage state
+// -----------------------------------------------------------------------------
+let HOURLY_WAGE = null; // default; updated from storage or popup
+
+// -----------------------------------------------------------------------------
+//  DOM mutation observer (runs conversion on newly‑inserted nodes)
+// -----------------------------------------------------------------------------
+let domObserver = null;
+
+function observeDomChanges() {
+  if (domObserver) return; // already observing
+  domObserver = new MutationObserver(() => {
+    // For simplicity, re‑run conversion for the whole document
+    convertMoneyToHours();
+  });
+
+  domObserver.observe(document.body, { childList: true, subtree: true });
+  console.log("[TimeSwap] MutationObserver started");
+}
+
+// -----------------------------------------------------------------------------
+//  Message listener – triggered by popup.js
+// -----------------------------------------------------------------------------
+chrome.runtime.onMessage.addListener((request) => {
+  if (request.action === "convertMoneyToHours") {
+    if (typeof request.hourlyWage === "number" && request.hourlyWage > 0) {
+      HOURLY_WAGE = request.hourlyWage;
+      console.log("[TimeSwap] Hourly wage set by popup:", HOURLY_WAGE);
+    }
+
+    convertMoneyToHours(); // initial pass
+    observeDomChanges(); // keep page in sync
+  }
+});
+
+// -----------------------------------------------------------------------------
+//  Conversion helpers
+// -----------------------------------------------------------------------------
 /**
  * Convert a string like "$79.99" or "$7999" into "X.X hours".
  * Handles cases where the decimal might be missing for cents.
@@ -23,6 +62,10 @@ function dollarsToHours(amountStr) {
  * Main function: Finds currency symbols, gathers price, converts, replaces.
  */
 function convertMoneyToHours() {
+  if (!HOURLY_WAGE) {
+    console.log("[TimeSwap] No hourly wage set. Skipping conversion.");
+    return;
+  }
   const walker = document.createTreeWalker(
     document.body,
     NodeFilter.SHOW_TEXT,

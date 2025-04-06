@@ -111,7 +111,30 @@ function saveRate() {
 }
 
 function convertToHours() {
-  // TODO: Implement conversion logic
+  // Calculate the effective hourly rate from the current form state
+  const hr = computeHourlyRate();
+
+  if (hr <= 0) {
+    statusDiv.textContent = "Please enter a valid rate or salary before converting.";
+    statusDiv.style.color = "red";
+    setTimeout(() => {
+      statusDiv.textContent = "";
+      statusDiv.style.color = "green";
+    }, 3000);
+    return;
+  }
+
+  // Send a message to the active tab so the content script can run the conversion
+  chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+    if (!tabs || tabs.length === 0) {
+      console.error("No active tab found.");
+      return;
+    }
+    chrome.tabs.sendMessage(tabs[0].id, {
+      action: "convertMoneyToHours",
+      hourlyWage: hr,
+    });
+  });
 }
 
 // Add event listeners
