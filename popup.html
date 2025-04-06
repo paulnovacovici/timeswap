@@ -51,11 +51,23 @@
       button:hover {
         background-color: #005bb5;
       }
+    
       .container {
         margin-bottom: 15px;
       }
       #hourlyRateContainer, #salaryContainer {
         margin-bottom: 12px;
+      }
+      button.secondary {
+        background-color: #6c757d;
+      }
+      button.secondary:hover {
+        background-color: #5a6268;
+      }
+      hr {
+        margin: 10px 0;
+        border: none;
+        border-top: 1px solid #ccc;
       }
     </style>
   </head>
@@ -89,7 +101,9 @@
       <label>Computed Hourly Rate:</label>
       <span id="computedHourly">$0.00</span>
     </div>
-    <button id="saveButton">Save</button>
+  <button id="saveButton">Save</button>
+  <hr>
+  <button id="convertButton" class="secondary">Convert to Hours</button>
     <div id="status"></div>
     <script src="popup.js"></script>
   </body>

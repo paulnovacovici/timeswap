@@ -110,6 +110,10 @@ function saveRate() {
   });
 }
 
+function convertToHours() {
+  // TODO: Implement conversion logic
+}
+
 // Add event listeners
 payTypeRadios.forEach(radio => {
   radio.addEventListener("change", (event) => {
@@ -121,6 +125,8 @@ payTypeRadios.forEach(radio => {
 hourlyRateInput.addEventListener("input", updateComputedHourly);
 salaryInput.addEventListener("input", updateComputedHourly);
 saveButton.addEventListener("click", saveRate);
+const convertButton = document.getElementById("convertButton");
+convertButton.addEventListener("click", convertToHours);
 
 // On DOM load, initialize UI
 document.addEventListener("DOMContentLoaded", () => {
